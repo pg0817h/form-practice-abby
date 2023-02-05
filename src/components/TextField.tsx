@@ -9,8 +9,7 @@ const TextField: FunctionComponent<InputProps> = ({
   type,
   validate,
 }) => {
-  const { value, onChange /*error*/ } = useInput({ source, validate });
-
+  const { value, onChange, error } = useInput({ source, validate });
   return (
     <div>
       <div style={{ display: "flex", gridGap: "8px" }}>
@@ -22,6 +21,7 @@ const TextField: FunctionComponent<InputProps> = ({
           type={type}
           placeholder={placeholder}
         />
+        {error && <span>{`Please enter a valid ${source}`} </span>}
       </div>
     </div>
   );
