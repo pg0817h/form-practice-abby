@@ -5,16 +5,15 @@ import { FormContext } from "../components/SimpleForm";
 interface UseInputProps extends Pick<InputProps, "source" | "validate"> {}
 
 function useInput(props: UseInputProps) {
-  const { setValues, values } = useContext(FormContext);
-  const [error, setError] = useState(false);
+  const { setValues, values, setError, error } = useContext(FormContext);
   const [min, max] = props.validate;
   const onChange = useCallback(
     (v: string | number) => {
       const isMinError = min(v);
       const isMaxError = max(v);
       const newError = isMinError || isMaxError;
-      if (error !== newError) {
-        setError(newError);
+      if (error[props.source] !== newError) {
+        setError({ ...error, [props.source]: newError });
       }
       setValues({
         ...values,
