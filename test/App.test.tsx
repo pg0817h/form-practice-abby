@@ -30,12 +30,8 @@ describe("", () => {
     expect(container).toBeInTheDocument();
     expect(textFieldLabel).toBeInTheDocument();
   });
+
   it("Should display an error message upon submission if there is an error.", () => {
-    useInputMock.mockReturnValue({
-      value: "name",
-      onChange: jest.fn(),
-      error: { name: true },
-    });
     const { getByLabelText, getByText } = render(
       <SimpleForm>
         <TextField
@@ -74,7 +70,7 @@ describe("", () => {
         <TextField
           source={"name"}
           label={"name"}
-          validate={[min, max]}
+          validate={[min(5), max(10)]}
           placeholder="name"
         />
       </SimpleForm>
@@ -88,6 +84,7 @@ describe("", () => {
     const errorMessage = getByTestId("test-error");
     expect(errorMessage).toBeInTheDocument();
   });
+
   it("Should display an error message if there is a maximum validation error.", () => {
     useInputMock.mockReturnValue({
       value: "name",

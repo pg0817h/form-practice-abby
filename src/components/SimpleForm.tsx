@@ -15,10 +15,10 @@ const SimpleForm = ({ children }: PropsWithChildren<{}>) => {
     [setValues, values, setError, error]
   );
 
-  const isError = Object.values(error).some((err) => err);
-
   const onClick = (e: any) => {
     e.preventDefault();
+
+    const isError = Object.values(error).some((err) => err);
     if (isError) {
       alert("Please update your password or username.");
       return;

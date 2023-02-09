@@ -4,9 +4,6 @@ export interface InputProps {
   source: string;
   label: string;
   placeholder?: string;
-  validate: [
-    (input: string | number) => boolean,
-    (input: string | number) => boolean
-  ];
+  validate: ((input: string) => string | undefined)[];
   type?: HTMLInputTypeAttribute;
 }
