@@ -21,8 +21,13 @@ const TextField: FunctionComponent<InputProps> = ({
           name={source}
           type={type}
           placeholder={placeholder}
+          id={source}
         />
-        {error[source] && <span>{`Please enter a valid ${source}`} </span>}
+        {error[source] && (
+          <span data-testid="test-error">
+            {`Please enter a valid ${source}`}{" "}
+          </span>
+        )}
       </div>
     </div>
   );
