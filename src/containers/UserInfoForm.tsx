@@ -10,28 +10,30 @@ const min = (n: number) => (input: string) => {
 const max = (n: number) => (input: string) => {
   return input.length > n ? `Please enter at most ${n} characters` : undefined;
 };
-const select = (input: any) => {
-  return input === "" || undefined ? `Please select your options` : undefined;
+const required = () => (input: string | boolean) => {
+  return (input === "" || input === undefined) ? `Please enter the value` : undefined;
 };
-const check = (input: string) => {
-  return input === "false" ? `Please check the agreement` : undefined;
-};
+
 function UserInfoForm(): JSX.Element {
   return (
     <SimpleForm>
-      <TextField source={"name"} label={"이름"} validate={[min(5), max(10)]} />
+      <TextField source={"name"} label={"이름"} validate={[required(), min(5), max(10)]} />
       <TextField
         type="password"
         source={"password"}
         label={"비밀번호"}
-        validate={[min(5), max(10)]}
+        validate={[required(), min(5), max(10)]}
       />
-      <SelectField source="성별" label="성별" validate={[select]} />
+      <SelectField options={[
+          { option: "Male", value: "male" },
+          { option: "Female", value: "female" },
+          { option: "Gender not listed", value: "other" },
+      ]} placeholder={'성별을 선택해주세요'} source="성별" label="성별" validate={[required()]} />
       <CheckField
         type="checkbox"
         source={"동의"}
         label="동의"
-        validate={[check]}
+        validate={[required()]}
       />
     </SimpleForm>
   );

@@ -7,7 +7,7 @@ interface UseInputProps extends Pick<InputProps, "source" | "validate"> {}
 function useInput(props: UseInputProps) {
   const { setValues, values, setError, error } = useContext(FormContext);
   const onChange = useCallback(
-    (v: string) => {
+    (v: string | boolean) => {
 
       const errorArray: string[] = [];
       props.validate.forEach((validateFunc) => {

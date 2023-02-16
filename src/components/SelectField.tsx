@@ -2,29 +2,22 @@ import React, { FunctionComponent, useEffect, useRef } from "react";
 import { InputProps } from "../types/InputProps";
 import useInput from "../hooks/useInput";
 
-const options = [
-  { option: "Select your gender", value: "" },
-  { option: "Male", value: "male" },
-  { option: "Female", value: "female" },
-  { option: "Gender not listed", value: "other" },
-];
-const SelectField: FunctionComponent<InputProps> = ({
+type Props = InputProps & {
+  options: {option: string; value: string }[];
+}
+
+const SelectField: FunctionComponent<Props> = ({
   source,
   label,
   placeholder,
-  type,
-  validate
+  validate,
+    options
 }) => {
   const { value, onChange, error } = useInput({
     source,
     validate,
   });
- 
- // TODO: Once the validation is triggered in onSubmit, this useEffect is no longer needed should be removed."
-  useEffect(() => {
-    // updateOptionsArray()
-    onChange('')
-  }, []);
+
   return (
     <div>
       <div style={{ display: "flex", gridGap: "8px" }}>
@@ -35,6 +28,9 @@ const SelectField: FunctionComponent<InputProps> = ({
           onChange={(e) => onChange(e.target.value)}
           value={value}
         >
+          {placeholder && (
+              <option value="">{placeholder}</option>
+          )}
           {options.map((option) => (
             <option key={option.option} value={option.value}>
               {option.option}

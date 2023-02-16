@@ -20,97 +20,107 @@ describe("", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it("should render TextField", () => {
-    const { container, getByLabelText } = render(
-      <SimpleForm>
-        <TextField source={"name"} label={"name"} validate={[min, max]} />
-      </SimpleForm>
-    );
-    const textFieldLabel = getByLabelText(/name/i);
-    expect(container).toBeInTheDocument();
-    expect(textFieldLabel).toBeInTheDocument();
-  });
 
-  it("Should display an error message upon submission if there is an error.", () => {
-    const { getByLabelText, getByText } = render(
-      <SimpleForm>
-        <TextField
-          source={"name"}
-          label={"name"}
-          validate={[min, max]}
-          placeholder="name"
-        />
-      </SimpleForm>
-    );
-
-    const textFieldLabel = getByLabelText(/name/i);
-    expect(textFieldLabel).toBeInTheDocument();
-    act(() => {
-      fireEvent.change(textFieldLabel, { target: { value: "J" } });
-      // userEvent.type(textFieldLabel, "ok");
-    });
-    const submit = getByText("제출");
-    expect(submit).toBeInTheDocument();
-    act(() => {
-      fireEvent.click(submit);
+  describe("TextField", () => {
+    it("should render TextField", () => {
+      const { container, getByLabelText } = render(
+          <SimpleForm>
+            <TextField source={"name"} label={"name"} validate={[min, max]} />
+          </SimpleForm>
+      );
+      const textFieldLabel = getByLabelText(/name/i);
+      expect(container).toBeInTheDocument();
+      expect(textFieldLabel).toBeInTheDocument();
     });
 
-    expect(window.alert).toHaveBeenCalledWith(
-      "Please update your password or username."
-    );
-  });
-  it("Should display an error message if there is a minimum validation error.", () => {
-    useInputMock.mockReturnValue({
-      value: "name",
-      onChange: jest.fn(),
-      error: { name: true },
-    });
-    const { getByLabelText, getByTestId } = render(
-      <SimpleForm>
-        <TextField
-          source={"name"}
-          label={"name"}
-          validate={[min(5), max(10)]}
-          placeholder="name"
-        />
-      </SimpleForm>
-    );
-
-    const textFieldLabel = getByLabelText(/name/i);
-    expect(textFieldLabel).toBeInTheDocument();
-    act(() => {
-      fireEvent.change(textFieldLabel, { target: { value: "J" } });
-    });
-    const errorMessage = getByTestId("test-error");
-    expect(errorMessage).toBeInTheDocument();
-  });
-
-  it("Should display an error message if there is a maximum validation error.", () => {
-    useInputMock.mockReturnValue({
-      value: "name",
-      onChange: jest.fn(),
-      error: { name: true },
-    });
-    const { getByLabelText, getByTestId } = render(
-      <SimpleForm>
-        <TextField
-          source={"name"}
-          label={"name"}
-          validate={[min, max]}
-          placeholder="name"
-        />
-      </SimpleForm>
-    );
-
-    const textFieldLabel = getByLabelText(/name/i);
-    expect(textFieldLabel).toBeInTheDocument();
-    act(() => {
-      fireEvent.change(textFieldLabel, {
-        target: { value: "Jeeeeeeeeeeeeeeeee" },
+    it("Should display an error message if there is a minimum validation error.", () => {
+      useInputMock.mockReturnValue({
+        value: "name",
+        onChange: jest.fn(),
+        error: { name: true },
       });
-      // userEvent.type(textFieldLabel, "ok");
+      const { getByLabelText, getByTestId } = render(
+          <SimpleForm>
+            <TextField
+                source={"name"}
+                label={"name"}
+                validate={[min(5), max(10)]}
+                placeholder="name"
+            />
+          </SimpleForm>
+      );
+
+      const textFieldLabel = getByLabelText(/name/i);
+      expect(textFieldLabel).toBeInTheDocument();
+      act(() => {
+        fireEvent.change(textFieldLabel, { target: { value: "J" } });
+      });
+      const errorMessage = getByTestId("test-error");
+      expect(errorMessage).toBeInTheDocument();
     });
-    const errorMessage = getByTestId("test-error");
-    expect(errorMessage).toBeInTheDocument();
+
+    it("Should display an error message if there is a maximum validation error.", () => {
+      useInputMock.mockReturnValue({
+        value: "name",
+        onChange: jest.fn(),
+        error: { name: true },
+      });
+      const { getByLabelText, getByTestId } = render(
+          <SimpleForm>
+            <TextField
+                source={"name"}
+                label={"name"}
+                validate={[min, max]}
+                placeholder="name"
+            />
+          </SimpleForm>
+      );
+
+      const textFieldLabel = getByLabelText(/name/i);
+      expect(textFieldLabel).toBeInTheDocument();
+      act(() => {
+        fireEvent.change(textFieldLabel, {
+          target: { value: "Jeeeeeeeeeeeeeeeee" },
+        });
+        // userEvent.type(textFieldLabel, "ok");
+      });
+      const errorMessage = getByTestId("test-error");
+      expect(errorMessage).toBeInTheDocument();
+    });
   });
+
+  describe('SelectField', () => {})
+
+  describe('CheckField', () => {})
+
+  describe('SimpleForm', () => {
+    it("Should display an error message upon submission if there is an error.", () => {
+      const { getByLabelText, getByText } = render(
+          <SimpleForm>
+            <TextField
+                source={"name"}
+                label={"name"}
+                validate={[min(5), max(10)]}
+                placeholder="name"
+            />
+          </SimpleForm>
+      );
+
+      const textFieldLabel = getByLabelText(/name/i);
+      expect(textFieldLabel).toBeInTheDocument();
+      act(() => {
+        fireEvent.change(textFieldLabel, { target: { value: "J" } });
+        // userEvent.type(textFieldLabel, "ok");
+      });
+      const submit = getByText("제출");
+      expect(submit).toBeInTheDocument();
+      act(() => {
+        fireEvent.click(submit);
+      });
+
+      expect(window.alert).toHaveBeenCalledWith(
+          "Please fix the errors"
+      );
+    });
+  })
 });
