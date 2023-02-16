@@ -23,11 +23,10 @@ const TextField: FunctionComponent<InputProps> = ({
           placeholder={placeholder}
           id={source}
         />
-        {error[source] && (
-          <span data-testid="test-error">
-            {error[source]}
-          </span>
-        )}
+        {error[source]?.length > 0 &&
+          error[source].map((err: string) => (
+            <span data-testid="test-error">{err}</span>
+          ))}
       </div>
     </div>
   );

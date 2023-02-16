@@ -11,7 +11,6 @@ function useInput(props: UseInputProps) {
       const errorArray: string[] = [];
       props.validate.forEach((validateFunc) => {
         const newError = validateFunc(v);
-
         if (newError) {
           errorArray.push(newError);
         }
