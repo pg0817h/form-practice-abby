@@ -1,4 +1,5 @@
-import SelectField from "../components/selectField";
+import CheckField from "../components/CheckField";
+import SelectField from "../components/SelectField";
 import SimpleForm from "../components/SimpleForm";
 import TextField from "../components/TextField";
 
@@ -9,10 +10,12 @@ const min = (n: number) => (input: string) => {
 const max = (n: number) => (input: string) => {
   return input.length > n ? `Please enter at most ${n} characters` : undefined;
 };
-const check = (input: string) => {
-  return input === "" ? `Please select your options` : undefined;
+const select = (input: any) => {
+  return input === "" || undefined ? `Please select your options` : undefined;
 };
-
+const check = (input: string) => {
+  return input === "false" ? `Please check the agreement` : undefined;
+};
 function UserInfoForm(): JSX.Element {
   return (
     <SimpleForm>
@@ -23,7 +26,13 @@ function UserInfoForm(): JSX.Element {
         label={"비밀번호"}
         validate={[min(5), max(10)]}
       />
-      <SelectField source="성별" label="성별" validate={[check]} />
+      <SelectField source="성별" label="성별" validate={[select]} />
+      <CheckField
+        type="checkbox"
+        source={"동의"}
+        label="동의"
+        validate={[check]}
+      />
     </SimpleForm>
   );
 }

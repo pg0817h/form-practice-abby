@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { InputProps } from "../types/InputProps";
 import useInput from "../hooks/useInput";
 
@@ -8,17 +8,28 @@ const options = [
   { option: "Female", value: "female" },
   { option: "Gender not listed", value: "other" },
 ];
+const defaultValidationFunction = (input: any) => {
+  if (input === undefined) {
+    console.log("input");
+    return;
+  }
+};
 const SelectField: FunctionComponent<InputProps> = ({
   source,
   label,
   placeholder,
   type,
-  validate,
+  validate = defaultValidationFunction,
 }) => {
   const { value, onChange, error } = useInput({
     source,
     validate,
   });
+
+  useEffect(() => {
+    console.log("select value", value);
+    onChange("");
+  }, [value]);
   return (
     <div>
       <div style={{ display: "flex", gridGap: "8px" }}>

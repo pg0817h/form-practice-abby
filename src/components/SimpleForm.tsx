@@ -17,14 +17,16 @@ const SimpleForm = ({ children }: PropsWithChildren<{}>) => {
 
   const onClick = (e: any) => {
     e.preventDefault();
-
     const isError = Object.values(error).some(
       (err: unknown, index: number, array: unknown[]) => {
         return (err as [])?.length > 0;
       }
     );
+    const isEmpty = Object.values(values);
+    console.log("isEmpty", isEmpty);
+    console.log("Values onClick", value);
     if (isError) {
-      alert("Please update your password or username.");
+      alert("Please fill out all fields");
       return;
     }
     alert(JSON.stringify(values));
