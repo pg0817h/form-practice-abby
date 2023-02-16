@@ -8,7 +8,7 @@ function useInput(props: UseInputProps) {
   const { setValues, values, setError, error } = useContext(FormContext);
   const onChange = useCallback(
     (v: string) => {
-      console.log("source onchange value", props.source, values);
+
       const errorArray: string[] = [];
       props.validate.forEach((validateFunc) => {
         const newError = validateFunc(v);

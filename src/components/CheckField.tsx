@@ -13,6 +13,7 @@ const CheckField: FunctionComponent<InputProps> = ({
     source,
     validate,
   });
+  // TODO: Once the validation is triggered in onSubmit, this useEffect is no longer needed should be removed."
   useEffect(() => {
     if (value == undefined) {
       onChange("false");

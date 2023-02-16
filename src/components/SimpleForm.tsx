@@ -22,9 +22,9 @@ const SimpleForm = ({ children }: PropsWithChildren<{}>) => {
         return (err as [])?.length > 0;
       }
     );
+    // TODO: needs to implement validation function 
     const isEmpty = Object.values(values);
-    console.log("isEmpty", isEmpty);
-    console.log("Values onClick", value);
+  
     if (isError) {
       alert("Please fill out all fields");
       return;
