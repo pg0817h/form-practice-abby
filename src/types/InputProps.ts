@@ -1,5 +1,5 @@
 import { HTMLInputTypeAttribute } from "react";
-type Validator = ((input: string) => string | undefined) | ((input: string | boolean) => string | undefined);
+type Validator =  ((input: string | boolean) => string | undefined);
 export interface InputProps {
   source: string;
   label: string;

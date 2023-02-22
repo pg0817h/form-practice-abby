@@ -3,26 +3,29 @@ import SelectField from "../components/SelectField";
 import SimpleForm from "../components/SimpleForm";
 import TextField from "../components/TextField";
 
-const min = (n: number) => (input: string) => {
+// TODO: wrong input type 
+const min = (n: number) => (input: string | boolean) => {
+  if (typeof input === 'boolean') return undefined;
   return input.length < n ? `Please enter at least ${n} characters` : undefined;
 };
-
-const max = (n: number) => (input: string ) => {
+// TODO: wrong input type 
+const max = (n: number) => (input: string | boolean) => {
+  if (typeof input === 'boolean') return undefined;
   return input.length > n ? `Please enter at most ${n} characters` : undefined;
 };
 const required = () => (input: string | boolean) => {
-  return (input === "" || input === undefined || input === false) ? `Please enter the value` : undefined;
+  return (input === "" || input === undefined || input === 'false') ? `Please enter the value` : undefined;
 };
 
 function UserInfoForm(): JSX.Element {
   return (
     <SimpleForm>
-      <TextField source="name" label={"이름"} validate={[required(), min(5), max(10)]} />
+      <TextField source="name" label={"이름"} validate={[min(5), max(10)]} />
       <TextField
         type="password"
         source="password"
         label={"비밀번호"}
-        validate={[required(), min(5), max(10)]}
+        validate={[min(5), max(10)]}
       />
       <SelectField options={[
           { option: "Male", value: "male" },
