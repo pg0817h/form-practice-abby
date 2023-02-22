@@ -14,7 +14,7 @@ const max = (n: number) => (input: string | boolean) => {
   return input.length > n ? `Please enter at most ${n} characters` : undefined;
 };
 const required = () => (input: string | boolean) => {
-  return (input === "" || input === undefined || input === 'false') ? `Please enter the value` : undefined;
+  return (input === "" || input === undefined || input === false) ? `Please enter the value` : undefined;
 };
 
 function UserInfoForm(): JSX.Element {
