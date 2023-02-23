@@ -1,17 +1,21 @@
 /**
  * @jest-environment jsdom
  */
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, fireEvent, act } from "@testing-library/react";
 import React from "react";
 import SimpleForm from "../src/components/SimpleForm";
 import TextField from "../src/components/TextField";
 import SelectField from '../src/components/SelectField'
 import CheckField from '../src/components/CheckField'
+
+import "@testing-library/jest-dom";
+import {userEvent} from "@testing-library/user-event/setup/index";
+
 const min = jest.fn().mockImplementation((n: number) => (input: string ) =>  input.length < n ? `Please enter at least ${n} characters` : undefined)
 const max = jest.fn().mockImplementation((n: number) => (input: string ) => input.length > n ? `Please enter at most ${n} characters` : undefined);
-const required = jest.fn().mockImplementation(() => (input: string | boolean) => 
+const required = jest.fn().mockImplementation(() => (input: string | boolean) =>
    (input === "" || input === undefined || input === false) ? `Please enter the value` : undefined)
-   
+
 type HookData = {
   value: any;
   onChange: (v: string | number) => void;
@@ -37,24 +41,25 @@ describe("UserInfoForm", () => {
     });
 
     it("Should display an error message if there is a minimum validation error.", () => {
-    
+//arrange
       const { getByLabelText, getByTestId } = render(
           <SimpleForm>
             <TextField source="name" label={"이름"} validate={[ min(5), max(10)]} />
           </SimpleForm>
       );
 
-      const textFieldLabel = getByLabelText(/이름/i);
-      expect(textFieldLabel).toBeInTheDocument();
-      act(() => {
-        fireEvent.change(textFieldLabel, { target: { value: "J" } });
-      });
+    const textFieldLabel = getByLabelText(/이름/i);
+
+      // act
+      fireEvent.change(textFieldLabel, { target: { value: "J" } });
       const errorMessage = getByTestId("test-error");
+
+      // assert
       expect(errorMessage).toBeInTheDocument();
     });
 
     it("Should display an error message if there is a maximum validation error.", () => {
-  
+
       const { getByLabelText, getByTestId } = render(
           <SimpleForm>
             <TextField source="name" label={"이름"} validate={[ min(5), max(10)]} />
@@ -74,10 +79,31 @@ describe("UserInfoForm", () => {
     });
   });
 
-  describe('SelectField', () => { 
-    it("Should submit if there is no error", () => {
-    
-    const { getByLabelText, getByText,getByTestId,getAllByTestId,queryByTestId } = render(
+  describe('SelectField', () => {
+      it('should work', () => {
+
+          const { getByLabelText, getByText,getAllByTestId,queryByTestId } = render(
+              <SimpleForm>
+                  <SelectField options={[
+                      { option: "Male", value: "male" },
+                      { option: "Female", value: "female" },
+                      { option: "Gender not listed", value: "other" },
+                  ]} placeholder={'성별을 선택해주세요'} source="gender" label="성별" validate={[required()]} />
+              </SimpleForm>
+          );
+
+          const selectFieldLabel = getByLabelText(/성별/i);
+
+          // act
+          fireEvent.change(selectFieldLabel,{target: {value:"male"}})
+          let options = getAllByTestId('select-option')
+
+          expect(options[0]).toBeTruthy()
+      })
+
+      it("Should submit if there is no error", () => {
+
+    const { getByLabelText, getByText,queryByTestId } = render(
         <SimpleForm>
           <SelectField options={[
           { option: "Male", value: "male" },
@@ -87,21 +113,20 @@ describe("UserInfoForm", () => {
         </SimpleForm>
     );
 
-    const selectFieldLabel = getByLabelText(/성별/i);
-    expect(selectFieldLabel).toBeInTheDocument();
-    fireEvent.change(selectFieldLabel,{target: {value:"male"}})
-    let options = getAllByTestId('select-option')
-    expect(options[0]).toBeTruthy()
     const submit = getByText("제출");
-    expect(submit).toBeInTheDocument();
-    act(() => {
+          const selectFieldLabel = getByLabelText(/성별/i);
+
+          //act
+          fireEvent.change(selectFieldLabel,{target: {value:"male"}})
       fireEvent.click(submit);
-    });
+
+          // assert
     const errorMessage = queryByTestId("test-error");
     expect(errorMessage).not.toBeInTheDocument();
     });
+
     it("Should display an error message if there is an errors.", ()=>{
-      const { getByLabelText, getByText,getByTestId,getAllByTestId,queryByTestId } = render(
+      const { getByLabelText, getByTestId,} = render(
         <SimpleForm>
           <SelectField options={[
           { option: "Male", value: "male" },
@@ -112,21 +137,20 @@ describe("UserInfoForm", () => {
     );
 
     const selectFieldLabel = getByLabelText(/성별/i);
-    expect(selectFieldLabel).toBeInTheDocument();
-    act(()=> {
-      fireEvent.change(selectFieldLabel,{target: {value:"male"}})
-      fireEvent.change(selectFieldLabel,{target: {value:""}})
-    })
+    //act
+  fireEvent.change(selectFieldLabel,{target: {value:"male"}})
+  fireEvent.change(selectFieldLabel,{target: {value:""}})
+
+        //assert
     const errorMessage = getByTestId("test-error");
     expect(errorMessage).toBeInTheDocument();
-   
     })
 
 })
 
   describe('CheckField', () => {
     it("Should submit if there is no error", () => {
-    
+
       const { getByLabelText, getByText,getByTestId,getAllByTestId,queryByTestId } = render(
           <SimpleForm>
            <CheckField
@@ -137,7 +161,7 @@ describe("UserInfoForm", () => {
       />
           </SimpleForm>
       );
-      const checkBox = getByTestId('checkbox-id') 
+      const checkBox = getByTestId('checkbox-id')
       const checkFieldLabel = getByLabelText(/동의/i);
       expect(checkFieldLabel).toBeInTheDocument();
       const submit = getByText("제출");
@@ -161,21 +185,21 @@ describe("UserInfoForm", () => {
      />
          </SimpleForm>
       );
-      
-      const checkBox = getByTestId('checkbox-id') 
+
+      const checkBox = getByTestId('checkbox-id')
       const checkFieldLabel = getByLabelText(/동의/i);
       expect(checkFieldLabel).toBeInTheDocument();
-     
+
       act(()=> {
         fireEvent.click(checkFieldLabel)
         fireEvent.click(checkFieldLabel)
       })
-     
+
       expect(checkBox).not.toBeChecked()
       const errorMessage = queryByTestId("test-error");
       expect(errorMessage).toBeInTheDocument();
       })
-      
+
   })
 
   describe('SimpleForm', () => {
