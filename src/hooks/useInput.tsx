@@ -11,12 +11,17 @@ function useInput(props: UseInputProps) {
 
       const errorArray: string[] = [];
       props.validate.forEach((validateFunc) => {
-        const newError = validateFunc(v);
+        const newError = validateFunc(v); //TODO
         if (newError) {
           errorArray.push(newError);
         }
       });
-      setError({ ...error, [props.source]: errorArray });
+      if (errorArray.length === 0) {
+        const { [props.source]: deletedKey, ...restOfErrors } = error;
+        setError(restOfErrors);
+      } else {
+        setError({ ...error, [props.source]: errorArray });
+      }
       setValues({
         ...values,
         [props.source]: v,

@@ -32,7 +32,7 @@ const SelectField: FunctionComponent<Props> = ({
               <option value="">{placeholder}</option>
           )}
           {options.map((option) => (
-            <option key={option.option} value={option.value}>
+            <option data-testid="select-option" key={option.option} value={option.value}>
               {option.option}
             </option>
           ))}

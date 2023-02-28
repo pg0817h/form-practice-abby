@@ -25,7 +25,7 @@ const TextField: FunctionComponent<InputProps> = ({
         />
         {error[source]?.length > 0 &&
           error[source].map((err: string) => (
-            <span data-testid="test-error">{err}</span>
+            <span key={err} data-testid="test-error">{err}</span>
           ))}
       </div>
     </div>

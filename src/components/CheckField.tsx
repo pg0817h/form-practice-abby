@@ -20,6 +20,7 @@ const CheckField: FunctionComponent<InputProps> = ({
           <label>
             <input
               type={type}
+              data-testid="checkbox-id"
               checked={value}
               onChange={(e) => onChange(e.target.checked)}
             />
